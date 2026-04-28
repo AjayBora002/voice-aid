@@ -1,0 +1,158 @@
+// Real Mumbai neighborhood data with authentic coordinates and profiles
+export const MUMBAI_ZONES = [
+  {
+    id: "Z001",
+    name: "Dharavi",
+    ward: "H/E",
+    lat: 19.0390,
+    lng: 72.8519,
+    population: 700000,
+    density: "extreme", // 277,136/km²
+    floodRisk: "high",
+    medicalAccessScore: 2, // 1-10, lower = worse access
+    description: "Asia's largest informal settlement. Chronic water scarcity, sanitation deficits.",
+    activeNGOs: ["Apnalaya", "SNEHA", "Dharavi Rocks"],
+    chronicNeeds: ["water_sanitation", "child_health", "livelihood"]
+  },
+  {
+    id: "Z002",
+    name: "Govandi",
+    ward: "M/E",
+    lat: 19.0694,
+    lng: 72.9239,
+    population: 400000,
+    density: "very_high",
+    floodRisk: "very_high",
+    medicalAccessScore: 1,
+    description: "Adjacent to Deonar dumping ground. Extremely high TB prevalence, ground water contamination.",
+    activeNGOs: ["CRY", "Pratham"],
+    chronicNeeds: ["medical_emergency", "child_education", "water_contamination"]
+  },
+  {
+    id: "Z003",
+    name: "Mankhurd",
+    ward: "M/E",
+    lat: 19.0524,
+    lng: 72.9289,
+    population: 250000,
+    density: "high",
+    floodRisk: "very_high",
+    medicalAccessScore: 3,
+    description: "Transit zone with migrant worker population. Flood-prone, poor drainage infrastructure.",
+    activeNGOs: ["Aseema", "Ghar"],
+    chronicNeeds: ["flood_relief", "shelter", "food_security"]
+  },
+  {
+    id: "Z004",
+    name: "Kurla",
+    ward: "L",
+    lat: 19.0728,
+    lng: 72.8826,
+    population: 500000,
+    density: "very_high",
+    floodRisk: "high",
+    medicalAccessScore: 4,
+    description: "Dense mixed-income area. High informal employment, significant child malnutrition.",
+    activeNGOs: ["Breakthrough", "iCall"],
+    chronicNeeds: ["child_nutrition", "women_safety", "livelihood"]
+  },
+  {
+    id: "Z005",
+    name: "Chembur",
+    ward: "M/W",
+    lat: 19.0607,
+    lng: 72.8998,
+    population: 300000,
+    density: "high",
+    floodRisk: "medium",
+    medicalAccessScore: 5,
+    description: "Mix of industrial and residential. Air quality concerns from refineries.",
+    activeNGOs: ["Niramaya", "EdelGive"],
+    chronicNeeds: ["health_awareness", "elderly_care", "livelihood"]
+  },
+  {
+    id: "Z006",
+    name: "Andheri East",
+    ward: "K/E",
+    lat: 19.1136,
+    lng: 72.8697,
+    population: 350000,
+    density: "medium",
+    floodRisk: "medium",
+    medicalAccessScore: 7,
+    description: "Commercial hub with large migrant worker population in informal settlements.",
+    activeNGOs: ["Magic Bus", "Akanksha"],
+    chronicNeeds: ["migrant_support", "child_education", "mental_health"]
+  },
+  {
+    id: "Z007",
+    name: "Malad West",
+    ward: "P/N",
+    lat: 19.1871,
+    lng: 72.8487,
+    population: 450000,
+    density: "high",
+    floodRisk: "medium",
+    medicalAccessScore: 6,
+    description: "Coastal slum pockets alongside residential towers. Fishing community at risk.",
+    activeNGOs: ["Awaaz Foundation", "YUVA"],
+    chronicNeeds: ["coastal_livelihood", "child_health", "food_security"]
+  },
+  {
+    id: "Z008",
+    name: "Bandra East",
+    ward: "H/W",
+    lat: 19.0536,
+    lng: 72.8440,
+    population: 200000,
+    density: "medium",
+    floodRisk: "low",
+    medicalAccessScore: 8,
+    description: "Higher volunteer density zone. Key dispatch point for central Mumbai operations.",
+    activeNGOs: ["iCall", "SNDT Women's University"],
+    chronicNeeds: ["mental_health", "elderly_care"]
+  },
+  {
+    id: "Z009",
+    name: "Worli Koliwada",
+    ward: "G/S",
+    lat: 19.0093,
+    lng: 72.8172,
+    population: 80000,
+    density: "medium",
+    floodRisk: "medium",
+    medicalAccessScore: 6,
+    description: "Traditional fishing community. Seasonal income loss, cyclone vulnerability.",
+    activeNGOs: ["Coastalway", "Snehasadan"],
+    chronicNeeds: ["livelihood", "elderly_care", "housing"]
+  },
+  {
+    id: "Z010",
+    name: "Borivali East",
+    ward: "R/N",
+    lat: 19.2307,
+    lng: 72.8567,
+    population: 380000,
+    density: "medium",
+    floodRisk: "low",
+    medicalAccessScore: 7,
+    description: "Northern suburb. Resource-rich zone with high volunteer availability.",
+    activeNGOs: ["Teach For India", "Give India"],
+    chronicNeeds: ["elderly_care", "child_education"]
+  }
+];
+
+export const NEED_CATEGORIES = {
+  medical_emergency: { label: "Medical Emergency", color: "#ef4444", icon: "🏥", urgencyBase: 9 },
+  flood_relief: { label: "Flood Relief", color: "#3b82f6", icon: "🌊", urgencyBase: 8 },
+  water_contamination: { label: "Water Contamination", color: "#8b5cf6", icon: "💧", urgencyBase: 9 },
+  food_security: { label: "Food Security", color: "#f97316", icon: "🍱", urgencyBase: 7 },
+  child_nutrition: { label: "Child Nutrition", color: "#f59e0b", icon: "👶", urgencyBase: 8 },
+  child_education: { label: "Child Education", color: "#10b981", icon: "📚", urgencyBase: 5 },
+  shelter: { label: "Emergency Shelter", color: "#6366f1", icon: "🏠", urgencyBase: 8 },
+  mental_health: { label: "Mental Health Support", color: "#ec4899", icon: "🧠", urgencyBase: 6 },
+  elderly_care: { label: "Elderly Care", color: "#14b8a6", icon: "👴", urgencyBase: 7 },
+  livelihood: { label: "Livelihood Support", color: "#84cc16", icon: "💼", urgencyBase: 5 },
+  water_sanitation: { label: "Water & Sanitation", color: "#06b6d4", icon: "🚿", urgencyBase: 7 },
+  health_awareness: { label: "Health Awareness Camp", color: "#a78bfa", icon: "💊", urgencyBase: 5 }
+};

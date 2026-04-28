@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VoiceAid Mumbai — Smart Volunteer Allocation System</title>
+  <meta name="description" content="Real-time AI-driven volunteer coordination for Mumbai's most vulnerable communities. Matching the right people to the most urgent local needs using multi-factor scoring." />
+  <meta name="theme-color" content="#080c14" />
+
+  <!-- Leaflet Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Leaflet Heat Plugin -->
+  <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+
+  <!-- ══ SPLASH SCREEN ══ -->
+  <div class="splash-screen" id="splash-screen" aria-hidden="true">
+    <div class="splash-inner">
+      <div class="splash-logo-ring">
+        <div class="splash-logo-icon">🤝</div>
+      </div>
+      <div class="splash-title">VoiceAid <span class="splash-city">Mumbai</span></div>
+      <div class="splash-tagline">AI-Powered Volunteer Coordination for India's Largest City</div>
+      <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+      <div class="splash-sub">Connecting communities · Dispatching hope</div>
+    </div>
+  </div>
+
+  <!-- ══ HAMBURGER ══ -->
+  <button class="hamburger-btn" id="hamburger-btn" onclick="toggleMobileSidebar()" aria-label="Open navigation">☰</button>
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleMobileSidebar()"></div>
+
+  <!-- ══ CONFETTI CANVAS ══ -->
+  <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+  <!-- ══ TOAST CONTAINER ══ -->
+  <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- ══ KEYBOARD SHORTCUTS OVERLAY ══ -->
+  <div class="shortcuts-overlay" id="shortcuts-overlay" role="dialog" aria-label="Keyboard shortcuts" aria-modal="true">
+    <div class="shortcuts-modal">
+      <div class="shortcuts-header">
+        <h2>⌨️ Keyboard Shortcuts</h2>
+        <button class="modal-close" onclick="document.getElementById('shortcuts-overlay').classList.remove('open')" aria-label="Close shortcuts">✕</button>
+      </div>
+      <div class="shortcuts-grid">
+        <div class="shortcut-row"><kbd>1</kbd><span>Dashboard</span></div>
+        <div class="shortcut-row"><kbd>2</kbd><span>Live Map</span></div>
+        <div class="shortcut-row"><kbd>3</kbd><span>Active Tasks</span></div>
+        <div class="shortcut-row"><kbd>4</kbd><span>Volunteers</span></div>
+        <div class="shortcut-row"><kbd>5</kbd><span>Match Engine</span></div>
+        <div class="shortcut-row"><kbd>6</kbd><span>Impact</span></div>
+        <div class="shortcut-row"><kbd>/</kbd><span>Report Need</span></div>
+        <div class="shortcut-row"><kbd>D</kbd><span>Demo Mode</span></div>
+        <div class="shortcut-row"><kbd>?</kbd><span>Show Shortcuts</span></div>
+        <div class="shortcut-row"><kbd>Esc</kbd><span>Close Modal</span></div>
+      </div>
+    </div>
+  </div>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar" id="sidebar" role="complementary" aria-label="Navigation sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <div class="logo-icon" aria-hidden="true">🤝</div>
+        <div>
+          <div class="logo-name">VoiceAid</div>
+          <div class="logo-sub">Mumbai Command Center</div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav" role="navigation" aria-label="Main navigation">
+      <button class="nav-btn active" id="nav-dashboard" onclick="switchView('dashboard')" aria-current="page" aria-label="Dashboard view" data-key="1">
+        <span class="nav-icon" aria-hidden="true">📊</span> Dashboard
+      </button>
+      <button class="nav-btn" id="nav-map" onclick="switchView('map')" aria-label="Live map view" data-key="2">
+        <span class="nav-icon" aria-hidden="true">🗺️</span> Live Map
+      </button>
+      <button class="nav-btn" id="nav-tasks" onclick="switchView('tasks')" aria-label="Active tasks view" data-key="3">
+        <span class="nav-icon" aria-hidden="true">🚨</span> Active Tasks
+        <span class="badge critical" id="critical-badge" aria-label="critical tasks count">0</span>
+      </button>
+      <button class="nav-btn" id="nav-volunteers" onclick="switchView('volunteers')" aria-label="Volunteers view" data-key="4">
+        <span class="nav-icon" aria-hidden="true">👥</span> Volunteers
+      </button>
+      <button class="nav-btn" id="nav-match" onclick="switchView('match')" aria-label="Smart match engine" data-key="5">
+        <span class="nav-icon" aria-hidden="true">⚡</span> Match Engine
+      </button>
+      <button class="nav-btn" id="nav-impact" onclick="switchView('impact')" aria-label="Impact analytics view" data-key="6">
+        <span class="nav-icon" aria-hidden="true">📈</span> Impact
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="system-status">
+        <span class="pulse-dot" aria-hidden="true"></span>
+        <span>System Live — Mumbai</span>
+      </div>
+      <div class="last-updated" id="last-updated">Updating...</div>
+      <!-- A11y bar -->
+      <div class="a11y-bar">
+        <button class="a11y-btn" id="contrast-btn" onclick="toggleHighContrast()" title="High Contrast Mode">🔆 Contrast</button>
+        <button class="a11y-btn" id="font-btn" onclick="toggleLargeFont()" title="Large Font Mode">🔤 Large</button>
+      </div>
+      <!-- Live event ticker -->
+      <div class="ticker-wrapper" aria-live="polite">
+        <div class="ticker-label">LIVE</div>
+        <div class="ticker-track">
+          <div class="ticker-inner" id="ticker-inner">Initialising...</div>
+        </div>
+      </div>
+      <button class="shortcut-hint" onclick="document.getElementById('shortcuts-overlay').classList.add('open')" aria-label="Show keyboard shortcuts">⌨️ <kbd>?</kbd> Shortcuts</button>
+      <button class="settings-btn" onclick="openSettings()" aria-label="Open settings">⚙️ Settings</button>
+    </div>
+  </aside>
+
+  <!-- ══ MAIN CONTENT ══ -->
+  <main class="main-content" id="main-content">
+
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <h1 class="page-title" id="page-title">Command Dashboard</h1>
+        <span class="page-subtitle" id="page-subtitle">Real-time overview of Mumbai community needs</span>
+      </div>
+      <div class="topbar-right">
+        <div class="alert-banner" id="alert-banner" style="display:none" role="alert">
+          <span class="alert-dot" aria-hidden="true"></span>
+          <span id="alert-text"></span>
+        </div>
+        <select class="city-switcher" id="city-switcher" onchange="switchCity(this.value)" aria-label="Switch city">
+          <option value="mumbai">🏙️ Mumbai</option>
+          <option value="delhi">🏛️ Delhi (Q3 2025)</option>
+          <option value="chennai">🌊 Chennai (Q3 2025)</option>
+        </select>
+        <button class="btn-demo" id="demo-btn" onclick="runDemoMode()" aria-label="Run demo walkthrough">🎬 Demo Mode</button>
+        <button class="btn-secondary" id="sim-btn" onclick="toggleSimulation()" aria-label="Toggle simulation mode">
+          🔄 Simulation: OFF
+        </button>
+        <button class="btn-secondary" onclick="openReportForm()" aria-label="Report a community need (shortcut: /)">
+          📝 Report Need
+        </button>
+        <button class="btn-primary" onclick="runAllocation()" aria-label="Run smart allocation algorithm">
+          ⚡ Run Smart Allocation
+        </button>
+      </div>
+    </header>
+
+    <!-- ══ DASHBOARD VIEW ══ -->
+    <section class="view active" id="view-dashboard" role="main" aria-label="Command dashboard">
+
+      <!-- Why Mumbai context card -->
+      <div class="why-mumbai-card" id="why-mumbai-card" role="region" aria-label="Problem context">
+        <div class="why-mumbai-left">
+          <div class="why-badge">🎯 PROBLEM WE SOLVE</div>
+          <h2 class="why-title">Mumbai's invisible volunteer gap</h2>
+          <p class="why-desc">Over <strong>12 million people</strong> live in Mumbai's informal settlements. Volunteer coordination is done via phone calls and WhatsApp — leading to 4–6 hour response times. VoiceAid reduces this to <strong>under 23 minutes</strong> using multi-factor AI matching.</p>
+        </div>
+        <div class="why-mumbai-stats">
+          <div class="why-stat"><div class="why-val">20M+</div><div class="why-lbl">Mumbai Population</div></div>
+          <div class="why-stat"><div class="why-val">43%</div><div class="why-lbl">Live in Slums</div></div>
+          <div class="why-stat"><div class="why-val">4–6h</div><div class="why-lbl">Old Response Time</div></div>
+          <div class="why-stat"><div class="why-val color-green">&lt;23m</div><div class="why-lbl">With VoiceAid</div></div>
+        </div>
+        <button class="why-close" onclick="document.getElementById('why-mumbai-card').style.display='none'" aria-label="Dismiss context card">✕</button>
+      </div>
+
+      <!-- Weather Widget -->
+      <div id="weather-bar-wrapper"></div>
+
+      <!-- Claude AI Situation Report -->
+      <div class="claude-card" id="claude-report-card" role="region" aria-label="Claude AI Situation Report">
+        <div class="card-header" style="margin-bottom:12px">
+          <h2>🤖 Claude AI — Commander's Situation Report</h2>
+          <span class="ai-badge">CLAUDE AI</span>
+        </div>
+        <div id="claude-report-content"><p style="font-size:13px;color:var(--text-muted)">Click the button below to generate a real-time AI briefing of the current crisis situation.</p></div>
+        <button class="claude-btn" id="claude-report-btn" onclick="generateSituationReport()" style="margin-top:12px">✨ Generate AI Situation Report</button>
+      </div>
+
+      <!-- Surge Detection -->
+      <div id="surge-detection-wrapper"></div>
+
+      <div class="stats-grid" id="stats-grid" role="region" aria-label="Key metrics"></div>
+
+      <!-- AI INSIGHTS BANNER -->
+      <div class="card ai-insights-card" role="region" aria-label="AI insights panel">
+        <div class="card-header">
+          <h2>🤖 AI Insights — Predictive Risk Engine</h2>
+          <span class="ai-badge">LIVE ANALYSIS</span>
+        </div>
+        <div id="ai-insights-content"></div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-header">
+            <h2>🚨 Critical Tasks</h2>
+            <span class="see-all" onclick="switchView('tasks')" role="button" tabindex="0">See All →</span>
+          </div>
+          <div id="critical-task-list"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h2>📊 Need Categories</h2></div>
+          <canvas id="categoryChart" height="260" aria-label="Need categories doughnut chart" role="img"></canvas>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <div class="card-header"><h2>👥 Top Volunteers Ready</h2></div>
+          <div id="top-volunteers-list"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h2>📍 Zone Risk Overview</h2></div>
+          <div id="zone-risk-list"></div>
+        </div>
+      </div>
+
+      <!-- Data Sources Strip -->
+      <div class="data-sources-strip" role="region" aria-label="Data sources">
+        <div class="ds-label">📡 LIVE DATA SOURCES</div>
+        <div class="ds-items">
+          <span class="ds-item">🏥 BMC Health Dept</span>
+          <span class="ds-item">🌊 MCGM Ward Reports</span>
+          <span class="ds-item">👩‍⚕️ ASHA Network</span>
+          <span class="ds-item">🏘️ Apnalaya NGO</span>
+          <span class="ds-item">👶 SNEHA</span>
+          <span class="ds-item">📚 Magic Bus</span>
+          <span class="ds-item">🆘 NDMA Alerts</span>
+          <span class="ds-item">🔒 AES-256 Encrypted</span>
+          <span class="ds-item">🛡️ GDPR Compliant</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ MAP VIEW ══ -->
+    <section class="view" id="view-map" aria-label="Live need map">
+      <div class="map-controls" role="toolbar" aria-label="Map layer controls">
+        <button class="map-btn active" id="btn-needs" onclick="toggleLayer('needs')" aria-pressed="true">🔴 Community Needs</button>
+        <button class="map-btn" id="btn-volunteers" onclick="toggleLayer('volunteers')" aria-pressed="false">🟢 Volunteers</button>
+        <button class="map-btn" id="btn-heat" onclick="toggleLayer('heat')" aria-pressed="false">🌡️ Need Heatmap</button>
+      </div>
+      <div id="map" aria-label="Interactive map of Mumbai showing community needs and volunteer locations"></div>
+    </section>
+
+    <!-- ══ TASKS VIEW ══ -->
+    <section class="view" id="view-tasks" aria-label="Active tasks">
+      <div class="filter-bar" role="toolbar" aria-label="Task filters">
+        <button class="filter-btn active" onclick="filterTasks('all', this)" aria-pressed="true">All</button>
+        <button class="filter-btn" onclick="filterTasks('critical', this)" aria-pressed="false">🔴 Critical</button>
+        <button class="filter-btn" onclick="filterTasks('urgent', this)" aria-pressed="false">🟠 Urgent</button>
+        <button class="filter-btn" onclick="filterTasks('open', this)" aria-pressed="false">🟡 Open</button>
+      </div>
+      <div id="task-list-full"></div>
+    </section>
+
+    <!-- ══ VOLUNTEERS VIEW ══ -->
+    <section class="view" id="view-volunteers" aria-label="Volunteer roster">
+      <div class="vol-filter-bar">
+        <input class="vol-search" id="vol-search" type="search" placeholder="🔍  Search by name or zone…" oninput="filterVolunteers()" aria-label="Search volunteers" />
+        <select class="vol-filter-select" id="vol-skill-filter" onchange="filterVolunteers()" aria-label="Filter by skill">
+          <option value="">All Skills</option>
+          <option value="medical_emergency">🏥 Medical Emergency</option>
+          <option value="flood_relief">🌊 Flood Relief</option>
+          <option value="food_security">🍱 Food Security</option>
+          <option value="child_nutrition">👶 Child Nutrition</option>
+          <option value="child_education">📚 Child Education</option>
+          <option value="mental_health">🧠 Mental Health</option>
+          <option value="elderly_care">👴 Elderly Care</option>
+          <option value="water_sanitation">🚿 Water & Sanitation</option>
+          <option value="water_contamination">💧 Water Contamination</option>
+          <option value="shelter">🏠 Emergency Shelter</option>
+          <option value="livelihood">💼 Livelihood</option>
+          <option value="health_awareness">💊 Health Awareness</option>
+        </select>
+        <select class="vol-filter-select" id="vol-status-filter" onchange="filterVolunteers()" aria-label="Filter by status">
+          <option value="">All Status</option>
+          <option value="available">✓ Available</option>
+          <option value="on_mission">⚡ On Mission</option>
+        </select>
+        <div class="vol-count-label" id="vol-count-label"></div>
+      </div>
+      <div id="volunteer-grid"></div>
+
+      <!-- Onboarding tooltip anchor -->
+      <div id="vol-tour-anchor" style="height:0"></div>
+    </section>
+
+    <!-- ══ MATCH ENGINE VIEW ══ -->
+    <section class="view" id="view-match" aria-label="Smart match engine">
+      <div class="match-header">
+        <div class="card match-select-card">
+          <h2>⚡ Smart Match Engine</h2>
+          <p class="muted">Select a task to see the algorithm rank the best available volunteers in real-time.</p>
+          <div class="match-formula-pill">
+            Score = <code>(Urgency × 0.40) + (Skill × 0.35) + (Proximity × 0.25)</code> × Availability · + Experience Bonus
+          </div>
+          <select id="task-selector" onchange="runMatchForTask()" aria-label="Select a task to match volunteers">
+            <option value="">— Select a Task —</option>
+          </select>
+        </div>
+      </div>
+      <div id="match-results"></div>
+    </section>
+
+    <!-- ══ IMPACT VIEW ══ -->
+    <section class="view" id="view-impact" aria-label="Impact analytics">
+      <div class="impact-hero">
+        <h2>📈 System Impact — Mumbai Operations</h2>
+        <p class="muted">All numbers derived from real task and volunteer data in this system.</p>
+      </div>
+      <!-- Impact Calculator -->
+      <div class="impact-calc" id="impact-calculator">
+        <div class="impact-calc-val" id="impact-calc-val">0</div>
+        <div class="impact-calc-label">Lives Potentially Reached This Session</div>
+        <div class="impact-calc-sub">Resolved tasks × average 340 beneficiaries per task</div>
+        <div class="response-compare">
+          <div class="rc-before"><div class="rc-val">4–6h</div><div class="rc-lbl">Manual Coordination</div></div>
+          <div class="rc-arrow">→</div>
+          <div class="rc-after"><div class="rc-val" id="rc-after-val">23min</div><div class="rc-lbl">With VoiceAid AI</div></div>
+        </div>
+      </div>
+
+      <div class="stats-grid" id="impact-stats-grid"></div>
+      <div class="two-col">
+        <div class="card">
+          <div class="card-header"><h2>🏆 Top Deployed Volunteers</h2></div>
+          <div id="leaderboard"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h2>📊 Urgency Distribution</h2></div>
+          <canvas id="urgencyChart" height="260" aria-label="Urgency distribution bar chart" role="img"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h2>📋 Zone-by-Zone Coverage</h2></div>
+        <div id="zone-coverage-table"></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h2>🗒️ Session Dispatch Log</h2><span class="ai-badge" style="font-size:9px">LIVE</span></div>
+        <div id="dispatch-log"></div>
+      </div>
+      <div class="card roadmap-card">
+        <div class="card-header"><h2>🚀 Future Roadmap — VoiceAid v2.0</h2></div>
+        <div id="roadmap-content"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══ MODAL ══ -->
+  <div class="modal-overlay" id="modal-overlay" onclick="closeModal()" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal()" aria-label="Close modal">✕</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
