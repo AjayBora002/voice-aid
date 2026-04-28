@@ -1,4 +1,4 @@
-﻿/* ===========================
+/* ===========================
    VoiceAid â€” Design System
    Obsidian & Aurora Theme
    =========================== */
@@ -748,19 +748,19 @@ body.high-contrast .nav-btn.active{font-weight:800}
 .weather-val{font-weight:700;color:#f1f5f9}
 .rain-alert{color:#ef4444;font-weight:600;margin-left:auto;font-size:11px;animation:pulse 1s infinite}
 
-/* -- CLAUDE AI PANEL -- */
-.claude-card{background:linear-gradient(135deg,rgba(13,19,33,1),rgba(20,15,40,0.9));border:1px solid rgba(139,92,246,0.35);border-radius:14px;padding:20px;margin-bottom:20px;position:relative;overflow:hidden}
-.claude-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#8b5cf6,#3b82f6,#06b6d4);animation:shimmer 3s linear infinite}
-.claude-typing{display:flex;gap:5px;align-items:center;padding:8px 0}
-.claude-dot{width:8px;height:8px;border-radius:50%;background:#8b5cf6;animation:claudeDot 1.4s ease infinite}
-.claude-dot:nth-child(2){animation-delay:0.2s}
-.claude-dot:nth-child(3){animation-delay:0.4s}
-@keyframes claudeDot{0%,100%{opacity:0.3;transform:scale(0.8)}50%{opacity:1;transform:scale(1)}}
-.claude-result{font-size:13.5px;color:#e2e8f0;line-height:1.75;margin-top:8px}
-.claude-result strong{color:#c4b5fd}
-.claude-btn{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(59,130,246,0.2));border:1px solid rgba(139,92,246,0.4);color:#a78bfa;border-radius:8px;padding:10px 18px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:all 0.2s}
-.claude-btn:hover{background:linear-gradient(135deg,rgba(139,92,246,0.35),rgba(59,130,246,0.35));transform:translateY(-1px)}
-.claude-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+/* ══ GEMINI AI PANEL ══ */
+.ai-report-card{background:linear-gradient(135deg,rgba(13,19,33,1),rgba(20,15,40,0.9));border:1px solid rgba(139,92,246,0.35);border-radius:14px;padding:20px;margin-bottom:20px;position:relative;overflow:hidden}
+.ai-report-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#8b5cf6,#3b82f6,#06b6d4);animation:shimmer 3s linear infinite}
+.ai-typing{display:flex;gap:5px;align-items:center;padding:8px 0}
+.ai-dot{width:8px;height:8px;border-radius:50%;background:#8b5cf6;animation:aiDot 1.4s ease infinite}
+.ai-dot:nth-child(2){animation-delay:0.2s}
+.ai-dot:nth-child(3){animation-delay:0.4s}
+@keyframes aiDot{0%,100%{opacity:0.3;transform:scale(0.8)}50%{opacity:1;transform:scale(1)}}
+.ai-result{font-size:13.5px;color:#e2e8f0;line-height:1.75;margin-top:8px}
+.ai-result strong{color:#c4b5fd}
+.ai-btn{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(59,130,246,0.2));border:1px solid rgba(139,92,246,0.4);color:#a78bfa;border-radius:8px;padding:10px 18px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:all 0.2s}
+.ai-btn:hover{background:linear-gradient(135deg,rgba(139,92,246,0.35),rgba(59,130,246,0.35));transform:translateY(-1px)}
+.ai-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
 
 /* -- IMPACT CALCULATOR -- */
 .impact-calc{background:linear-gradient(135deg,rgba(16,185,129,0.08),rgba(59,130,246,0.08));border:1px solid rgba(16,185,129,0.2);border-radius:14px;padding:22px;margin-bottom:20px;text-align:center}
