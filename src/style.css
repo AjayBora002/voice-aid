@@ -83,6 +83,7 @@ html, body {
   cursor: pointer; text-align: left;
   display: flex; align-items: center; gap: 10px;
   transition: all 0.2s ease; position: relative;
+  flex-wrap: wrap;
 }
 .nav-btn:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
 .nav-btn.active { background: rgba(59,130,246,0.15); color: var(--aurora-blue); }
@@ -90,7 +91,13 @@ html, body {
   content: ''; position: absolute; left: 0; top: 20%; bottom: 20%;
   width: 3px; border-radius: 2px; background: var(--aurora-blue);
 }
-.nav-icon { font-size: 16px; }
+.nav-icon { font-size: 16px; flex-shrink: 0; }
+.nav-label { flex: 1; font-size: 13px; font-weight: 600; }
+.nav-hint { 
+  width: 100%; padding-left: 26px; 
+  font-size: 10px; color: var(--text-muted); 
+  font-weight: 400; margin-top: -4px;
+}
 .badge {
   margin-left: auto; padding: 2px 7px; border-radius: 20px;
   font-size: 11px; font-weight: 700;

@@ -74,8 +74,8 @@ window.switchView = function(view) {
   document.getElementById('view-' + view).classList.add('active');
   document.getElementById('nav-' + view).classList.add('active');
   state.activeView = view;
-  const titles = { dashboard:'Command Dashboard', map:'Live Need Map', tasks:'Active Tasks', volunteers:'Volunteer Roster', match:'Smart Match Engine', impact:'Impact Analytics' };
-  const subs = { dashboard:'Real-time overview of Mumbai community needs', map:'Real-time heatmap of Mumbai — community needs vs volunteer density', tasks:'All active community needs requiring volunteer support', volunteers:'Available and deployed volunteers across Mumbai', match:'Algorithm-powered volunteer-to-task matching', impact:'System-wide outcomes and deployment metrics' };
+  const titles = { dashboard:'🏠 Home — Live Overview', map:'🗺️ Emergency Map', tasks:'🚨 Emergency Tasks (ज़रूरी काम)', volunteers:'👥 Our Volunteers (स्वयंसेवक)', match:'⚡ Find Best Volunteer', impact:'📈 Our Impact (हमारा प्रभाव)' };
+  const subs = { dashboard:'See all emergencies and available helpers right now | अभी सभी आपातस्थिति देखें', map:'Click any red dot on the map to see the emergency details', tasks:'All active community emergencies that need a volunteer — sorted by urgency', volunteers:'All registered volunteers and their current status', match:'Pick an emergency below — the system finds the best available person automatically', impact:'How many people we have helped so far' };
   document.getElementById('page-title').textContent = titles[view];
   document.getElementById('page-subtitle').textContent = subs[view];
   if (view === 'map') initMap();

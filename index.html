@@ -92,17 +92,25 @@
         <span class="nav-icon" aria-hidden="true">🗺️</span> Live Map
       </button>
       <button class="nav-btn" id="nav-tasks" onclick="switchView('tasks')" aria-label="Active tasks view" data-key="3">
-        <span class="nav-icon" aria-hidden="true">🚨</span> Active Tasks
+        <span class="nav-icon" aria-hidden="true">🚨</span>
+        <span class="nav-label">Emergency Tasks</span>
+        <span class="nav-hint">ज़रूरी काम</span>
         <span class="badge critical" id="critical-badge" aria-label="critical tasks count">0</span>
       </button>
       <button class="nav-btn" id="nav-volunteers" onclick="switchView('volunteers')" aria-label="Volunteers view" data-key="4">
-        <span class="nav-icon" aria-hidden="true">👥</span> Volunteers
+        <span class="nav-icon" aria-hidden="true">👥</span>
+        <span class="nav-label">Our Volunteers</span>
+        <span class="nav-hint">स्वयंसेवक</span>
       </button>
       <button class="nav-btn" id="nav-match" onclick="switchView('match')" aria-label="Smart match engine" data-key="5">
-        <span class="nav-icon" aria-hidden="true">⚡</span> Match Engine
+        <span class="nav-icon" aria-hidden="true">⚡</span>
+        <span class="nav-label">Find Best Volunteer</span>
+        <span class="nav-hint">सही मदद खोजें</span>
       </button>
       <button class="nav-btn" id="nav-impact" onclick="switchView('impact')" aria-label="Impact analytics view" data-key="6">
-        <span class="nav-icon" aria-hidden="true">📈</span> Impact
+        <span class="nav-icon" aria-hidden="true">📈</span>
+        <span class="nav-label">Our Impact</span>
+        <span class="nav-hint">हमारा प्रभाव</span>
       </button>
     </nav>
 
@@ -148,15 +156,15 @@
           <option value="delhi">🏛️ Delhi (Q3 2025)</option>
           <option value="chennai">🌊 Chennai (Q3 2025)</option>
         </select>
-        <button class="btn-demo" id="demo-btn" onclick="runDemoMode()" aria-label="Run demo walkthrough">🎬 Demo Mode</button>
+        <button class="btn-demo" id="demo-btn" onclick="runDemoMode()" aria-label="Run demo walkthrough">▶️ Watch How It Works</button>
         <button class="btn-secondary" id="sim-btn" onclick="toggleSimulation()" aria-label="Toggle simulation mode">
-          🔄 Simulation: OFF
+          🔄 Live Simulation: OFF
         </button>
-        <button class="btn-secondary" onclick="openReportForm()" aria-label="Report a community need (shortcut: /)">
-          📝 Report Need
+        <button class="btn-secondary" onclick="openReportForm()" aria-label="Report a community need (shortcut: /)" style="background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.4);color:#ef4444;font-weight:700">
+          🚨 Report Emergency
         </button>
         <button class="btn-primary" onclick="runAllocation()" aria-label="Run smart allocation algorithm">
-          ⚡ Run Smart Allocation
+          ⚡ Auto-Assign Volunteers
         </button>
       </div>
     </header>
