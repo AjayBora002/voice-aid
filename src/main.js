@@ -74,8 +74,8 @@ window.switchView = function(view) {
   document.getElementById('view-' + view).classList.add('active');
   document.getElementById('nav-' + view).classList.add('active');
   state.activeView = view;
-  const titles = { dashboard:'🏠 Home — Live Overview', map:'🗺️ Emergency Map', tasks:'🚨 Emergency Tasks (ज़रूरी काम)', volunteers:'👥 Our Volunteers (स्वयंसेवक)', match:'⚡ Find Best Volunteer', impact:'📈 Our Impact (हमारा प्रभाव)' };
-  const subs = { dashboard:'See all emergencies and available helpers right now | अभी सभी आपातस्थिति देखें', map:'Click any red dot on the map to see the emergency details', tasks:'All active community emergencies that need a volunteer — sorted by urgency', volunteers:'All registered volunteers and their current status', match:'Pick an emergency below — the system finds the best available person automatically', impact:'How many people we have helped so far' };
+  const titles = { dashboard:'🏠 Live Overview', map:'🗺️ Emergency Map', tasks:'🚨 Emergency Tasks', volunteers:'👥 Our Volunteers', match:'⚡ Find Best Volunteer', impact:'📈 Our Impact' };
+  const subs = { dashboard:'See all emergencies and available helpers right now', map:'Click any red dot on the map to see emergency details', tasks:'All active community emergencies — sorted by urgency', volunteers:'All registered volunteers and their current status', match:'Pick an emergency — the system finds the best available person automatically', impact:'How many people we have helped so far' };
   document.getElementById('page-title').textContent = titles[view];
   document.getElementById('page-subtitle').textContent = subs[view];
   if (view === 'map') initMap();
