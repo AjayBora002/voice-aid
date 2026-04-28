@@ -84,6 +84,21 @@ window.switchView = function(view) {
   else if (view === 'match') renderMatchView();
   else if (view === 'impact') renderImpact();
   else renderDashboard();
+  // Auto-trigger Gemini briefing if 3+ critical tasks exist
+  if (view === 'dashboard') {
+    const critCount = state.tasks.filter(t => t.status === 'critical').length;
+    const apiKey = getGeminiKey ? getGeminiKey() : '';
+    if (critCount >= 3 && apiKey) {
+      // Only auto-trigger if not already showing a result
+      setTimeout(() => {
+        const content = document.getElementById('gemini-report-content');
+        if (content && !content.querySelector('.ai-result')) {
+          generateSituationReport();
+          addTickerEvent(`🤖 AI AUTO-BRIEFING: ${critCount} critical tasks detected — Gemini activated`);
+        }
+      }, 1500);
+    }
+  }
 };
 
 // ── DASHBOARD ──
@@ -340,6 +355,16 @@ function renderMatchView() {
   if (!sel) return;
   sel.innerHTML = '<option value="">— Select a Task —</option>' + state.tasks.map(t => `<option value="${t.id}">[${t.status.toUpperCase()}] ${t.title}</option>`).join('');
   document.getElementById('match-results').innerHTML = '';
+
+  // Auto-select the most critical/urgent unassigned task
+  const autoTask = state.tasks
+    .filter(t => t.status === 'critical' || t.status === 'urgent')
+    .sort((a, b) => b.urgency - a.urgency)[0];
+  if (autoTask) {
+    sel.value = autoTask.id;
+    // Small delay so the view renders first
+    setTimeout(() => window.runMatchForTask(), 120);
+  }
 }
 
 window.runMatchForTask = function() {
